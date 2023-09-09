@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge Sort Webpage</title>
+</head>
+<body>
+    <h1>Merge Sort Webpage</h1>
+    <p>Enter an array of integers (comma-separated):</p>
+    <input type="text" id="inputArray" placeholder="e.g., 5, 2, 9, 1, 5, 6">
+    <button id="sortButton">Sort</button>
+    <p>Sorted Array:</p>
+    <pre id="sortedArray"></pre>
+
+    <script>
+        document.getElementById("sortButton").addEventListener("click", function() {
+            const inputArray = document.getElementById("inputArray").value;
+            const inputArrayParsed = inputArray.split(',').map(item => parseInt(item.trim()));
+            console.log(JSON.stringify({ inputArray: inputArrayParsed }));
+
+            fetch("/merge-sort/sort", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(inputArrayParsed)
+            })
+            .then(response => response.json())
+            .then(sortedArray => {
+                document.getElementById("sortedArray").textContent = JSON.stringify(sortedArray);
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>
